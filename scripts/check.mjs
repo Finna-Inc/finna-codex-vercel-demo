@@ -1,10 +1,12 @@
 import { access, readFile } from "node:fs/promises";
 
 const requiredFiles = [
-  "index.html",
-  "styles.css",
-  "app.js",
-  "api/health.js",
+  "app/layout.jsx",
+  "app/page.jsx",
+  "app/globals.css",
+  "app/api/deployment/route.js",
+  "app/api/health/route.js",
+  "components/deployment-card.jsx",
   "vercel.json",
   "AGENTS.md",
   ".github/workflows/ci.yml",
@@ -12,13 +14,20 @@ const requiredFiles = [
 
 await Promise.all(requiredFiles.map((file) => access(file)));
 
-const html = await readFile("index.html", "utf8");
-const requiredText = ["Finna", "Codex", "GitHub", "Vercel", "id=\"workflow\""];
+const page = await readFile("app/page.jsx", "utf8");
+const requiredText = [
+  "Finna",
+  "Codex",
+  "GitHub",
+  "Vercel",
+  "id=\"workflow\"",
+  "<DeploymentCard />",
+];
 
 for (const text of requiredText) {
-  if (!html.includes(text)) {
-    throw new Error(`index.html is missing required text: ${text}`);
+  if (!page.includes(text)) {
+    throw new Error(`app/page.jsx is missing required text: ${text}`);
   }
 }
 
-console.log(`Validated ${requiredFiles.length} required files and homepage content.`);
+console.log(`Validated ${requiredFiles.length} required files and Next.js homepage content.`);

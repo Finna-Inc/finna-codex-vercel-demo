@@ -6,19 +6,20 @@ A small, inspectable demo of an AI-assisted delivery loop:
 Codex task → code + tests → commit → pull request → Vercel preview → merge → production
 ```
 
-The app is dependency-free, includes a Vercel health function, and uses GitHub Actions for deterministic checks. It is intentionally small enough to explain in a live demo.
+The app uses the Next.js App Router and React, includes responsive layouts and Vercel route handlers, and uses GitHub Actions for deterministic checks. It is intentionally small enough to explain in a live demo.
 
 ## Run locally
 
-Requires Node.js 20 or newer.
+Requires Node.js 20.9 or newer.
 
 ```bash
+npm install
 npm run check
 npm test
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The health endpoint is available at [http://localhost:3000/api/health](http://localhost:3000/api/health).
+Open [http://localhost:3000](http://localhost:3000). The health endpoint is available at [http://localhost:3000/api/health](http://localhost:3000/api/health), and the deployment card reads [http://localhost:3000/api/deployment](http://localhost:3000/api/deployment).
 
 ## Demonstrate the workflow with Codex
 
@@ -48,8 +49,9 @@ After the Git integration is connected, Vercel creates preview deployments for b
 
 | Path | Purpose |
 | --- | --- |
-| `index.html`, `styles.css`, `app.js` | Demo experience |
-| `api/health.js` | Vercel health function |
+| `app/page.jsx`, `app/globals.css` | Responsive React demo experience |
+| `app/api/*/route.js` | Next.js health and deployment-metadata route handlers |
+| `components/` | Interactive client components |
 | `.github/workflows/ci.yml` | Pull-request and `main` checks |
 | `.github/pull_request_template.md` | Review and deployment checklist |
 | `AGENTS.md` | Codex implementation and review guidance |
