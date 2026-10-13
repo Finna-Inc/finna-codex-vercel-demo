@@ -1,5 +1,7 @@
-export default function handler(_request, response) {
-  response.status(200).json({
+export const dynamic = "force-dynamic";
+
+export function GET() {
+  return Response.json({
     ok: true,
     service: "finna-codex-vercel-demo",
     timestamp: new Date().toISOString(),

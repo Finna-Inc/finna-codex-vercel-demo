@@ -1,7 +1,9 @@
-export default function handler(_request, response) {
+export const dynamic = "force-dynamic";
+
+export function GET() {
   const sha = process.env.VERCEL_GIT_COMMIT_SHA;
 
-  response.status(200).json({
+  return Response.json({
     environment: process.env.VERCEL_ENV || "local",
     branch: process.env.VERCEL_GIT_COMMIT_REF || "working-tree",
     commit: sha ? sha.slice(0, 7) : "uncommitted",

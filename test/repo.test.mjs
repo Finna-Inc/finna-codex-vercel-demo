@@ -1,10 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
-import deploymentHandler from "../api/deployment.js";
+import { GET as getDeployment } from "../app/api/deployment/route.js";
+import { GET as getHealth } from "../app/api/health/route.js";
 
 test("homepage explains the full delivery loop", async () => {
-  const html = await readFile("index.html", "utf8");
+  const page = await readFile("app/page.jsx", "utf8");
 
   for (const step of [
     "Prompt Codex",
@@ -13,16 +14,17 @@ test("homepage explains the full delivery loop", async () => {
     "Open the PR",
     "Merge to ship",
   ]) {
-    assert.match(html, new RegExp(step.replace("+", "\\+")));
+    assert.match(page, new RegExp(step.replace("+", "\\+")));
   }
 });
 
-test("Vercel configuration keeps the health function on Node 22", async () => {
+test("Vercel configuration keeps security headers", async () => {
   const config = JSON.parse(await readFile("vercel.json", "utf8"));
-  assert.equal(config.functions["api/*.js"].runtime, "nodejs22.x");
+  const headers = config.headers[0].headers;
+  assert.ok(headers.some(({ key }) => key === "X-Content-Type-Options"));
 });
 
-test("deployment endpoint exposes review-safe Vercel metadata", () => {
+test("deployment endpoint preserves review-safe Vercel metadata", async () => {
   const originalEnv = {
     VERCEL_ENV: process.env.VERCEL_ENV,
     VERCEL_GIT_COMMIT_REF: process.env.VERCEL_GIT_COMMIT_REF,
@@ -39,21 +41,10 @@ test("deployment endpoint exposes review-safe Vercel metadata", () => {
     VERCEL_GIT_REPO_SLUG: "finna-codex-vercel-demo",
   });
 
-  let statusCode;
-  let body;
-  const response = {
-    status(code) {
-      statusCode = code;
-      return this;
-    },
-    json(payload) {
-      body = payload;
-    },
-  };
+  const response = getDeployment();
+  const body = await response.json();
 
-  deploymentHandler({}, response);
-
-  assert.equal(statusCode, 200);
+  assert.equal(response.status, 200);
   assert.deepEqual(body, {
     environment: "preview",
     branch: "codex/add-deployment-status",
@@ -68,4 +59,14 @@ test("deployment endpoint exposes review-safe Vercel metadata", () => {
       process.env[key] = value;
     }
   }
+});
+
+test("health endpoint preserves its public response shape", async () => {
+  const response = getHealth();
+  const body = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(body.ok, true);
+  assert.equal(body.service, "finna-codex-vercel-demo");
+  assert.match(body.timestamp, /^\d{4}-\d{2}-\d{2}T/);
 });
