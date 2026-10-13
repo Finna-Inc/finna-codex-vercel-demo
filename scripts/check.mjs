@@ -4,6 +4,7 @@ const requiredFiles = [
   "index.html",
   "styles.css",
   "app.js",
+  "api/deployment.js",
   "api/health.js",
   "vercel.json",
   "AGENTS.md",
@@ -13,7 +14,14 @@ const requiredFiles = [
 await Promise.all(requiredFiles.map((file) => access(file)));
 
 const html = await readFile("index.html", "utf8");
-const requiredText = ["Finna", "Codex", "GitHub", "Vercel", "id=\"workflow\""];
+const requiredText = [
+  "Finna",
+  "Codex",
+  "GitHub",
+  "Vercel",
+  "id=\"workflow\"",
+  "data-deployment-card",
+];
 
 for (const text of requiredText) {
   if (!html.includes(text)) {

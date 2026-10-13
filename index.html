@@ -91,6 +91,45 @@
           </ol>
         </section>
 
+        <section class="deployment" aria-labelledby="deployment-title">
+          <div class="deployment-intro reveal">
+            <p class="section-kicker">Deployment signal</p>
+            <h2 id="deployment-title">See exactly what you are looking at.</h2>
+            <p>
+              This card reads Vercel's deployment metadata. A preview shows its feature branch;
+              production shows <code>main</code>. Local development gets an explicit fallback.
+            </p>
+          </div>
+
+          <div class="deployment-card reveal" data-deployment-card aria-live="polite">
+            <div class="deployment-card-topline">
+              <span class="pulse" aria-hidden="true"></span>
+              <span data-deployment-state>Reading environment…</span>
+            </div>
+            <dl class="deployment-details">
+              <div>
+                <dt>Environment</dt>
+                <dd data-deployment-environment>—</dd>
+              </div>
+              <div>
+                <dt>Branch</dt>
+                <dd data-deployment-branch>—</dd>
+              </div>
+              <div>
+                <dt>Commit</dt>
+                <dd data-deployment-commit>—</dd>
+              </div>
+              <div>
+                <dt>Repository</dt>
+                <dd data-deployment-repository>—</dd>
+              </div>
+            </dl>
+            <p class="deployment-note" data-deployment-note>
+              Waiting for deployment metadata.
+            </p>
+          </div>
+        </section>
+
         <section class="principles" aria-labelledby="principles-title">
           <div class="principles-copy reveal">
             <p class="section-kicker">Built for trust</p>

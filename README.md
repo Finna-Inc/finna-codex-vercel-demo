@@ -18,7 +18,7 @@ npm test
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The health endpoint is available at [http://localhost:3000/api/health](http://localhost:3000/api/health).
+Open [http://localhost:3000](http://localhost:3000). The health endpoint is available at [http://localhost:3000/api/health](http://localhost:3000/api/health), and the deployment card reads [http://localhost:3000/api/deployment](http://localhost:3000/api/deployment).
 
 ## Demonstrate the workflow with Codex
 
@@ -49,7 +49,7 @@ After the Git integration is connected, Vercel creates preview deployments for b
 | Path | Purpose |
 | --- | --- |
 | `index.html`, `styles.css`, `app.js` | Demo experience |
-| `api/health.js` | Vercel health function |
+| `api/health.js`, `api/deployment.js` | Vercel health and deployment-metadata functions |
 | `.github/workflows/ci.yml` | Pull-request and `main` checks |
 | `.github/pull_request_template.md` | Review and deployment checklist |
 | `AGENTS.md` | Codex implementation and review guidance |

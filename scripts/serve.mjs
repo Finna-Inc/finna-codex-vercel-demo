@@ -24,6 +24,19 @@ createServer(async (request, response) => {
     return;
   }
 
+  if (request.url === "/api/deployment") {
+    response.writeHead(200, { "content-type": "application/json; charset=utf-8" });
+    response.end(
+      JSON.stringify({
+        environment: "local",
+        branch: "working-tree",
+        commit: "uncommitted",
+        repository: "Finna-Inc/finna-codex-vercel-demo",
+      }),
+    );
+    return;
+  }
+
   const requestPath = request.url === "/" ? "/index.html" : request.url;
   const safePath = normalize(requestPath.split("?")[0]).replace(/^(\.\.(\/|\\|$))+/, "");
   const filePath = join(root, safePath);
