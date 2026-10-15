@@ -67,8 +67,7 @@ export default function Home() {
         <section className="hero" aria-labelledby="hero-title">
           <div className="eyebrow reveal">Next.js delivery loop · 001</div>
           <h1 id="hero-title" className="reveal">
-            From a good idea<br />
-            <span>to a live change.</span>
+            I did this!
           </h1>
           <div className="hero-footer reveal">
             <p>
