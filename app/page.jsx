@@ -53,8 +53,7 @@ export default function Home() {
 
       <header className="site-header">
         <a className="brand focus-ring" href="#top" aria-label="Finna Codex demo home">
-          <span className="brand-mark" aria-hidden="true">F</span>
-          <span>finna<span className="brand-divider">/</span>labs</span>
+          <img className="brand-logo" src="/finna-logo.svg" width="154" height="48" alt="Finna" />
         </a>
         <nav aria-label="Primary navigation">
           <a className="header-link focus-ring" href="#workflow">
