@@ -2,7 +2,9 @@ import { access, readFile } from "node:fs/promises";
 
 const requiredFiles = [
   "app/layout.jsx",
-  "app/page.jsx",
+  "app/delivery-demo/page.jsx",
+  "public/office.html",
+  "public/app.js",
   "app/globals.css",
   "app/api/deployment/route.js",
   "app/api/health/route.js",
@@ -14,7 +16,7 @@ const requiredFiles = [
 
 await Promise.all(requiredFiles.map((file) => access(file)));
 
-const page = await readFile("app/page.jsx", "utf8");
+const page = await readFile("app/delivery-demo/page.jsx", "utf8");
 const requiredText = [
   "Finna",
   "Codex",
@@ -26,7 +28,7 @@ const requiredText = [
 
 for (const text of requiredText) {
   if (!page.includes(text)) {
-    throw new Error(`app/page.jsx is missing required text: ${text}`);
+    throw new Error(`app/delivery-demo/page.jsx is missing required text: ${text}`);
   }
 }
 

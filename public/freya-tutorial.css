@@ -1,0 +1,711 @@
+/* ══ THE TUTORIAL · the look of freya-tutorial.js (2 Oct 2026) ══════════════════════════════════
+   One layer over the page in the top layer (a popover), built on Esben's walk (app.css, THE HOME
+   WALK): .walk for the veil and its hole, .walk-card for the raised card, .walk-guide for the card
+   on Freya's row, .wg-head for her mark, the bars and the count. What is new is here, on tq-:
+     · the modal: the card in the middle, as wide as a sheet's reading width (560px), its body
+       scrolling under a fixed head and keys; on a phone it rises from the foot, full width.
+     · free: no veil, only the ring round the part, which breathes; the page stays live.
+     · the pill: "Continue the tutorial" above Freya's bar while it is paused.
+     · the pieces, from the old tutorial (tutorial.html, tu-; deleted 14 Oct 2026): the ruler, the dial, the ride, the
+       ladder, the household pyramid, the dark running total, the chips and the crest.
+   Brand tokens only. 560px is a proposal, like the walk's 380px: a component size the brand
+   doesn't have yet. */
+
+.tq{z-index:95}                                   /* the stacking without a top layer (no popover) */
+.tq.is-away{visibility:hidden}                    /* Esben's walk has the screen */
+.tq[data-mode="free"],.tq[data-mode="pill"],.tq[data-mode="tap"]{pointer-events:none}
+.tq[data-mode="free"] .walk-card,.tq[data-mode="tap"] .walk-card,.tq .tq-pill{pointer-events:auto}
+/* the side panel and a tap keep the page in sight: a lighter veil, the lit part in full colour */
+.tq[data-mode="side"],.tq[data-mode="tap"]{--walk-dim:color-mix(in srgb,var(--bg) 46%,transparent)}
+:root[data-mode-now="dark"] .tq[data-mode="side"],:root[data-mode-now="dark"] .tq[data-mode="tap"]{--walk-dim:color-mix(in srgb,var(--black) 46%,transparent)}
+.tq[data-mode="tap"] .walk-spot{animation:tq-ring 1.8s var(--ease) infinite}
+.tq[data-mode="free"] .walk-spot{box-shadow:none;animation:tq-ring 1.8s var(--ease) infinite}
+.tq[data-mode="pill"] .walk-spot,.tq[data-mode="off"] .walk-spot{display:none}
+@keyframes tq-ring{50%{outline-offset:7px;outline-color:var(--primary-48)}}
+@media (prefers-reduced-motion:reduce){.tq[data-mode="free"] .walk-spot{animation:none}}
+
+/* ── the card ───────────────────────────────────────────────────────────────────────────── */
+.tq-card[hidden]{display:none}
+.tq-card .walk-title{outline:none}
+.tq-card .wg-head .icon-key{margin-left:auto}
+.tq-xp{flex:none;display:inline-flex;align-items:center;min-height:24px;padding:0 var(--space-2);border-radius:var(--r-pill);
+  background:var(--primary-12);color:var(--text-link);font:var(--weight-heading) var(--text-label)/1 var(--font);font-variant-numeric:tabular-nums}
+.tq-xp[hidden]{display:none}
+.tq-xp.is-pop{animation:tq-pop 600ms var(--ease)}
+@keyframes tq-pop{30%{transform:scale(1.18)}}
+.tq-keys{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:var(--space-3)}
+.tq-left{display:flex;align-items:center;flex-wrap:wrap;gap:var(--space-5);margin-right:auto}
+.tq-keys .link{font-size:var(--text-label)}
+/* what the key is waiting for, over the keys */
+.tq-need{flex-basis:100%;order:-1;margin:0;font-size:var(--text-label);line-height:1.45;color:var(--text-secondary);text-align:right;text-wrap:pretty}
+.tq-need[hidden]{display:none}
+@media (max-width:768px){.tq-need{text-align:left}}
+
+/* the modal: in the middle, the body scrolling between a fixed head and keys */
+.tq-card.is-modal{left:50%;top:50%;transform:translate(-50%,-50%);width:min(560px,calc(100% - 2 * var(--space-4)));
+  max-height:calc(100% - 2 * var(--space-5));display:flex;flex-direction:column;padding:var(--space-4) var(--space-6) var(--space-5);
+  box-shadow:0 12px 40px color-mix(in srgb,var(--black) 18%,transparent)}
+:root[data-mode-now="dark"] .tq-card.is-modal{box-shadow:var(--key-edge),0 0 0 var(--line-object) color-mix(in srgb,var(--white) 6%,transparent),0 16px 48px color-mix(in srgb,var(--black) 72%,transparent)}
+.tq-card.is-modal .tq-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 calc(-1 * var(--space-6));padding:0 var(--space-6) var(--space-1)}
+.tq-card.is-modal .walk-say{margin-top:var(--space-5)}
+.tq-card.is-modal .walk-title{font-size:var(--text-title);line-height:1.15;max-width:24ch;text-wrap:balance}
+.tq-card.is-modal .walk-line{max-width:52ch}
+.tq-card.is-modal .tq-keys{margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px solid var(--border)}
+.tq-body{display:flex;flex-direction:column;gap:var(--space-4);margin-top:var(--space-5);min-width:0}
+/* the first card: her mark, larger, and no head */
+.tq-card.is-hello .walk-say{margin-top:var(--space-4)}
+.tq-hello{padding-top:var(--space-3)}
+.tq-hello .fy-mk{display:block;width:56px;height:56px}
+.tq-card.is-hello .walk-title{font-size:var(--text-heading);line-height:1.05}
+
+/* the guide: on Freya's row (the walk's .walk-guide), its words straight in the grid */
+.tq-card.is-guide .tq-scroll{display:contents}
+.tq-card.is-guide .tq-body{display:none}
+.tq-card.is-guide .walk-keys{margin-top:var(--space-5)}
+@media (min-width:769px){.tq-card.is-guide .walk-keys{margin-top:0}}
+/* above her open panel: tighter, the words a size down */
+.tq-card.is-compact{padding:var(--space-3) var(--space-5) var(--space-4)}
+.tq-card.is-compact .walk-say{margin-top:var(--space-3)}
+.tq-card.is-compact .walk-title{font-size:var(--text-subhead);line-height:var(--lh-subhead)}
+.tq-card.is-compact .walk-line{font-size:var(--text-label);line-height:1.5}
+
+@media (max-width:768px){
+  .tq-card.is-modal{left:var(--space-3);right:var(--space-3);top:auto;bottom:calc(var(--space-3) + env(safe-area-inset-bottom,0px));transform:none;width:auto;
+    max-height:calc(100% - var(--space-6) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));padding:var(--space-4) var(--space-4) var(--space-4)}
+  .tq-card.is-modal .tq-scroll{margin:0 calc(-1 * var(--space-4));padding:0 var(--space-4) var(--space-1)}
+  .tq-card.is-modal .walk-say{margin-top:var(--space-4)}
+  .tq-card.is-modal .walk-title{font-size:var(--text-subhead);line-height:var(--lh-subhead);max-width:none}
+  .tq-card.is-hello .walk-title{font-size:var(--text-title)}
+  .tq-card.is-modal .walk-line{font-size:var(--text-label);line-height:1.5}
+  .tq-body{margin-top:var(--space-4)}
+  .tq-keys [data-tq="go"],.tq-keys [data-tq="continue"]{flex:1;justify-content:center}
+  .tq-card.is-modal .tq-keys{margin-top:var(--space-4);padding-top:var(--space-3)}
+}
+@media (max-height:700px){.tq-card.is-modal .walk-say{margin-top:var(--space-3)}.tq-body{margin-top:var(--space-4)}}
+
+/* ── the pill: picks the tutorial up again ──────────────────────────────────────────────── */
+.tq-pill{position:absolute;display:inline-flex;align-items:center;gap:var(--space-3);transform:translateX(-50%);max-width:calc(100% - 2 * var(--space-4));
+  min-height:var(--key-height-l);padding:var(--space-1) var(--space-5) var(--space-1) var(--space-2);border:1px solid var(--border-strong);border-radius:var(--r-pill);
+  background:var(--bg-raised);color:var(--text);cursor:pointer;text-align:left;box-shadow:0 8px 24px color-mix(in srgb,var(--black) 16%,transparent);
+  font:var(--weight-label) var(--text-label)/1.2 var(--font);transition:background-color var(--t-state) var(--ease),border-color var(--t-state) var(--ease)}
+.tq-pill[hidden]{display:none}
+.tq-pill:hover{border-color:var(--primary)}
+.tq-pill:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.tq-pill .fy-mk{width:32px;height:32px;flex:none}
+.tq-pill span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tq-pill b{font-weight:var(--weight-heading);color:var(--heading)}
+.tq-pill small{color:var(--text-secondary);font-size:var(--text-label);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+:root[data-mode-now="dark"] .tq-pill{box-shadow:var(--key-edge),0 12px 32px color-mix(in srgb,var(--black) 64%,transparent)}
+
+/* ── words and fields ───────────────────────────────────────────────────────────────────── */
+.tq-l{margin:0;font:var(--weight-label) var(--text-label)/1.2 var(--font);color:var(--text)}
+.tq-l .opt,.tq .form-row .label .opt{color:var(--text-tertiary);font-weight:var(--weight-reading)}
+.tq-q{display:flex;flex-direction:column;gap:var(--space-2);min-width:0}
+.tq-quiet{margin:0;font-size:var(--text-label);line-height:1.5;color:var(--text-secondary)}
+.tq-quiet b{font-weight:var(--weight-heading);color:var(--text)}
+.tq-quiet .link{font-size:inherit}
+.tq-cap{margin:calc(-1 * var(--space-2)) 0 0;font-size:var(--text-label);color:var(--text-tertiary)}
+.tq-fields{display:flex;flex-direction:column;gap:var(--space-4)}
+.tq .form-row .input{width:100%}
+.tq [hidden]{display:none !important}
+.tq-or{display:flex;align-items:center;gap:var(--space-3);margin:0;font-size:var(--text-label);color:var(--text-tertiary)}
+.tq-or::before,.tq-or::after{content:"";flex:1;height:1px;background:var(--border)}
+
+/* the dark running total */
+.tq-net{display:grid;gap:var(--space-2);margin:0;padding:var(--space-4);border-radius:var(--r-card);background:var(--desk-ground);box-shadow:inset 0 0 0 1px var(--desk-edge);color:var(--heading)}
+/* light, in the desk blue (3 Oct 2026, COLOUR ROLES in app.css): it was the one dark box in the card */
+.tq-net p{margin:0}
+.tq-net .l{font:var(--weight-label) var(--text-label)/1 var(--font);color:var(--text-secondary);letter-spacing:.02em}
+.tq-net .v{font:var(--weight-heading) var(--text-heading)/1 var(--font);letter-spacing:var(--track-display);font-variant-numeric:tabular-nums lining-nums;white-space:nowrap}
+.tq-net .v.is-dash{color:var(--text-tertiary)}
+.tq-net .w{font:var(--weight-label) var(--text-label)/1.35 var(--font);color:var(--text-secondary)}
+.tq-net .w b{color:var(--heading);font-weight:var(--weight-label);font-variant-numeric:tabular-nums}
+
+/* the ruler: the figure, four range keys, a track and a turned square that comes to the hand */
+.tq-fig{margin:0;font:var(--weight-heading) var(--text-title)/1.1 var(--font);letter-spacing:var(--track-heading);color:var(--heading);font-variant-numeric:tabular-nums lining-nums}
+.tq-fig.is-unset{color:var(--text-tertiary);font-size:var(--text-subhead);line-height:var(--lh-subhead)}
+.tq-bands{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-2)}
+.tq-bands.is-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.tq-bands .key{min-width:0;width:100%;padding:0 var(--space-1)}
+.tq-bands .key[aria-pressed="true"]{border-color:var(--primary);background:var(--primary-12);color:var(--text-link)}
+/* the walk's rule for a pressed key (app.css: white words for a filled black key) reached these light
+   grey ones too, and the chosen band read white on grey (Christian's screenshot, 4 Oct 2026). That rule
+   counts an id through :is(), (1,4,0), so this one needs (1,5,0) */
+#tq .tq-card .tq-bands .key.key-secondary[aria-pressed="true"]{color:var(--text-link)}
+.tq-sl{position:relative;margin:var(--space-3) var(--space-2) 0;touch-action:none}
+.tq-track{position:relative;height:8px;border-radius:4px;background:var(--border)}
+.tq-fill{position:absolute;inset:0 auto 0 0;border-radius:4px;background:var(--primary)}
+.tq-knob{position:absolute;top:50%;left:0;width:20px;height:20px;border-radius:6px;pointer-events:none;
+  transform:translate(-50%,-50%) rotate(45deg);background-color:var(--primary);background-image:var(--key-sheen);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--primary) 14%,transparent),0 4px 10px -2px color-mix(in srgb,var(--bg-dark) 35%,transparent);
+  transition:transform var(--t-state) var(--ease),box-shadow var(--t-move) var(--ease)}
+.tq-sl:hover .tq-knob,.tq-sl.is-drag .tq-knob{transform:translate(-50%,-50%) rotate(45deg) scale(1.35)}
+.tq-sl:has(input:focus-visible) .tq-knob{box-shadow:0 0 0 3px var(--bg-raised),0 0 0 5px var(--primary)}
+/* THE CURSOR IS BLACK FROM THE START (9 Oct 2026, Christian: "start with the black cursor instead of the grey, the black
+   color seems more CTA-ish"): before a figure is set only the figure says so ("Drag the ruler", grey); the cursor is
+   the key's black, the thing to take hold of. The dial's handle the same */
+.tq-sl.is-unset .tq-fill{background:var(--primary-48)}
+.tq-sl input{position:absolute;left:-14px;top:-18px;width:calc(100% + 28px);height:44px;margin:0;opacity:0;cursor:pointer}
+.tq-axis{display:flex;justify-content:space-between;margin:var(--space-3) calc(-1 * var(--space-1)) 0;
+  font:var(--weight-label) var(--text-label)/1 var(--font);color:var(--text-tertiary);font-variant-numeric:tabular-nums}
+.tq-ty{align-self:flex-start;font-size:var(--text-label)}
+.tq-type{display:flex;align-items:center;gap:var(--space-2)}
+.tq-type span{font:var(--weight-heading) var(--text-subhead)/1 var(--font);color:var(--text-secondary)}
+.tq-type .input{flex:1;min-width:0;font-variant-numeric:tabular-nums}
+
+/* chips: one choice, or several (with a box) */
+.tq-chips{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+.tq-chip{display:inline-flex;align-items:center;gap:var(--space-2);min-height:36px;padding:0 var(--space-4);border-radius:var(--r-pill);
+  border:1px solid var(--border-strong);background:var(--bg-raised);color:var(--text);cursor:pointer;
+  font:var(--weight-label) var(--text-label)/1 var(--font);transition:background-color var(--t-state) var(--ease),border-color var(--t-state) var(--ease)}
+.tq-chip:hover{background:var(--bg-sunken)}
+.tq-chip[aria-pressed="true"]{background:var(--bg-selected);border-color:var(--primary);color:var(--text-selected);box-shadow:inset 0 0 0 1px var(--primary)}
+.tq-chip:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.tq-chip .bx{display:grid;place-items:center;width:18px;height:18px;flex:none;border-radius:5px;border:1.5px solid var(--border-strong);background:var(--bg-raised);color:var(--fy-key-ink)}
+.tq-chip .bx svg{width:12px;height:12px;opacity:0}
+.tq-chip[aria-pressed="true"] .bx{background:var(--primary);border-color:var(--primary)}
+.tq-chip[aria-pressed="true"] .bx svg{opacity:1}
+.tq-chips.is-place{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.tq-chips.is-place .tq-chip{min-height:var(--key-height-xl);border-radius:var(--r-card);font-size:var(--text-reading);padding:0 var(--space-4);text-align:start;line-height:1.2}
+.tq-none{align-self:flex-start}
+.tq-chips.is-static{justify-content:center}
+.tq-chips.is-static .tq-chip{cursor:default;background:var(--bg-sunken);border-color:transparent}
+@media (pointer:coarse){.tq-chip{min-height:44px}}
+
+/* option keys: the household pyramid, and grids of two and three */
+.tq-opts{display:flex;flex-direction:column;gap:var(--space-3)}
+.tq-opt{display:flex;flex-direction:column;justify-content:center;gap:2px;width:100%;min-height:var(--key-height-xl);text-align:left;
+  padding:var(--space-3) var(--space-4);border:1px solid var(--border-strong);border-radius:var(--r-card);background:var(--bg-raised);
+  font:var(--weight-label) var(--text-reading)/1.3 var(--font);color:var(--text);cursor:pointer;
+  transition:background-color var(--t-state) var(--ease),border-color var(--t-state) var(--ease),box-shadow var(--t-state) var(--ease)}
+.tq-opt:hover{background:var(--bg-sunken)}
+.tq-opt:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.tq-opt[aria-pressed="true"]{border-color:var(--primary);background:var(--bg-selected);box-shadow:inset 0 0 0 1px var(--primary);color:var(--text-selected)}
+.tq-opt .nt{font:var(--weight-reading) var(--text-label)/1.35 var(--font);color:var(--text-tertiary)}
+.tq-opt[aria-pressed="true"] .nt{color:var(--text-selected)}
+.tq-opts.is-pyramid{align-items:center}
+.tq-opts.is-pyramid .tq-opt{text-align:center;align-items:center}
+.tq-opts.is-pyramid .tq-opt:nth-child(1){width:56%}
+.tq-opts.is-pyramid .tq-opt:nth-child(2){width:70%}
+.tq-opts.is-pyramid .tq-opt:nth-child(3){width:85%}
+.tq-opts.is-pyramid .tq-opt:nth-child(4){width:100%}
+.tq-opts.is-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.tq-opts.is-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2)}
+.tq-opts.is-grid2 .tq-opt,.tq-opts.is-grid3 .tq-opt{text-align:center;align-items:center;padding:var(--space-3) var(--space-2)}
+
+/* the family: a year, then a row for each person, each with its remove key */
+.tq-fam{display:flex;flex-direction:column;gap:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--border)}
+.tq-fam > .form-row{max-width:12rem}
+.tq-pair{display:grid;grid-template-columns:minmax(0,1fr) 7.5rem auto;align-items:end;gap:var(--space-3)}
+.tq-x{margin-bottom:calc((var(--input-height) - var(--key-height-m)) / 2)}
+.tq-adds{display:flex;flex-wrap:wrap;gap:var(--space-2)}
+/* married or not, under the partner's row (3 Oct 2026): three chips, one choice, three equal columns at
+   every width (a long name wraps inside its chip, so the row never breaks unevenly on a phone) */
+.tq-union{display:flex;flex-direction:column;gap:var(--space-2);margin-top:calc(-1 * var(--space-1))}
+.tq-chips.is-union{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.tq-chips.is-union .tq-chip{justify-content:center;text-align:center;white-space:normal;line-height:1.2;padding:var(--space-2)}
+@media (max-width:420px){.tq-pair{grid-template-columns:minmax(0,1fr) 5.5rem auto;gap:var(--space-2)}}
+
+/* the investments: four lines, one open at a time */
+.tq-rows{margin:0;padding:0;list-style:none;border-top:1px solid var(--border)}
+.tq-rows > li{border-bottom:1px solid var(--border)}
+.tq-row{display:flex;align-items:center;gap:var(--space-3);width:100%;min-height:52px;padding:var(--space-2) 0;border:0;background:transparent;
+  text-align:left;cursor:pointer;color:var(--text);font:var(--weight-label) var(--text-reading)/1.2 var(--font)}
+.tq-row:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:var(--r-chip)}
+.tq-row .num,.tq-up .num{display:grid;place-items:center;width:24px;height:24px;flex:none;border-radius:var(--r-chip);background:var(--bg-sunken);
+  color:var(--text-secondary);font:var(--weight-label) var(--text-label)/1 var(--font)}
+.tq-row .num svg,.tq-up .num svg{width:14px;height:14px}
+.tq-row.is-set .num,.tq-up .is-set .num{background:var(--primary-12);color:var(--text-link)}
+.tq-row .t{flex:1;min-width:0}
+.tq-row .am{font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--heading)}
+.tq-row .am.is-add{color:var(--text-link);font-size:var(--text-label)}
+.tq-row .chev{width:var(--key-icon-s);height:var(--key-icon-s);color:var(--text-tertiary);transition:transform var(--t-state) var(--ease)}
+.tq-row[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.tq-edit{display:flex;flex-direction:column;gap:var(--space-3);padding:var(--space-1) 0 var(--space-4);animation:tq-arrive var(--t-move) var(--ease) both}
+.tq-edit .hint{margin:0;font-size:var(--text-label);line-height:1.45;color:var(--text-secondary)}
+.tq-edit [data-r]{display:flex;flex-direction:column;gap:var(--space-2)}
+.tq-q [data-r],.tq-q [data-ra],.tq-q [data-ry],.tq-q [data-rm],.tq-q [data-rl],.tq-q [data-rh]{display:flex;flex-direction:column;gap:var(--space-2)}
+.tq-edit-k{display:flex;align-items:center;gap:var(--space-3)}
+/* THE HOMES (3 Oct 2026): a row per home, its mortgage named under it; inside, two chips for the mortgage */
+.tq-row .t small{display:block;margin-top:2px;font-size:var(--text-label);line-height:1.3;color:var(--text-tertiary)}
+.tq-chips.is-grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.tq-chips.is-grid2 .tq-chip{justify-content:center;text-align:center;white-space:normal;line-height:1.2;padding:var(--space-2)}
+.tq-mort{padding-left:var(--space-3);border-left:2px solid var(--border)}
+.tq-edit .tq-edit-k .link{padding:0;border:0;background:none;cursor:pointer;font-size:var(--text-label)}
+@keyframes tq-arrive{from{opacity:0;transform:translateY(6px)}}
+
+/* the dial: 1 to 40 years round 270 degrees */
+.tq-dial{display:flex;justify-content:center;touch-action:none;outline:none}
+.tq-dial svg{width:min(272px,100%);height:auto;display:block;cursor:grab;overflow:visible}
+.tq-dial:focus-visible svg .ring{stroke:var(--primary-48)}
+.tq-dial .ring{fill:none;stroke:var(--border);stroke-width:11;stroke-linecap:round}
+.tq-dial .arc{fill:none;stroke:var(--primary);stroke-width:11;stroke-linecap:round}
+.tq-dial .tk{stroke:var(--border-strong);stroke-width:1.5;stroke-linecap:round}
+.tq-dial .lb{fill:var(--text-tertiary);font:var(--weight-label) 12px var(--font);text-anchor:middle}
+.tq-dial .big{fill:var(--heading);font:var(--weight-heading) 56px var(--font);text-anchor:middle;letter-spacing:-.04em}
+.tq-dial .cap{fill:var(--text-tertiary);font:var(--weight-label) 15px var(--font);text-anchor:middle}
+.tq-dial .hz{fill:var(--text-link);font:var(--weight-heading) 12px var(--font);text-anchor:middle;letter-spacing:.06em}
+.tq-dial .hz.is-gold{fill:color-mix(in srgb,var(--gold) 75%,var(--black))}
+:root[data-mode-now="dark"] .tq-dial .hz.is-gold{fill:var(--gold)}
+.tq-dial .dk{fill:var(--primary);transform-box:fill-box;transform-origin:center;transition:transform var(--t-state) var(--ease)}
+.tq-dial:hover .dk,.tq-dial.is-drag .dk{transform:scale(1.35)}
+.tq-dial.is-unset .arc{stroke:var(--primary-48)}
+.tq-dial.is-unset .big{fill:var(--text-disabled)}
+.tq-opens{display:flex;flex-direction:column;gap:var(--space-2);font-size:var(--text-label);line-height:1.5;color:var(--text-secondary)}
+.tq-opens p{margin:0}
+.tq-opens b{font-weight:var(--weight-label);color:var(--text)}
+.tq-opens .dim{color:var(--text-tertiary)}
+
+/* a bad year, drawn from their own figure */
+.tq-ride{width:100%;max-width:460px;height:auto;display:block}
+.tq-ride .base{stroke:var(--border-strong);stroke-width:1;stroke-dasharray:3 5}
+.tq-ride .dip{fill:color-mix(in srgb,var(--text) 7%,transparent)}
+.tq-ride .ln{fill:none;stroke:var(--you);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}   /* your money: the line rule's blue (app.css, CHART COLOURS) */
+.tq-ride .pt{fill:var(--heading)}
+.tq-ride .lb{fill:var(--text-tertiary);font:var(--weight-label) 12px var(--font)}
+.tq-ride .lbv{fill:var(--heading);font:var(--weight-heading) 13px var(--font)}
+.tq-ride.is-draw .ln{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:tq-draw 1100ms var(--ease) 150ms forwards}
+.tq-ride.is-draw .dip{opacity:0;animation:tq-fade 500ms var(--ease) 900ms forwards}
+@keyframes tq-draw{to{stroke-dashoffset:0}}
+@keyframes tq-fade{to{opacity:1}}
+
+/* the ladder: drag to reorder, or arrows on a focused row */
+.tq-rung{display:flex;align-items:center;gap:var(--space-2);margin:0;font:var(--weight-heading) var(--text-label)/1 var(--font);color:var(--heading)}
+.tq-rung::after{content:"";flex:1;height:1px;background:var(--border-strong)}
+.tq-ladder{display:flex;flex-direction:column;gap:var(--space-2);margin:0;padding:0;list-style:none;touch-action:none}
+.tq-ladder li{display:flex;align-items:center;gap:var(--space-3);min-height:52px;padding:0 var(--space-3) 0 var(--space-4);
+  border:1px solid var(--border-strong);border-radius:var(--r-card);background:var(--bg-raised);cursor:grab;user-select:none;-webkit-user-select:none;
+  font:var(--weight-label) var(--text-reading)/1.2 var(--font);color:var(--text);
+  transition:border-color var(--t-state) var(--ease),background-color var(--t-state) var(--ease),box-shadow var(--t-state) var(--ease)}
+.tq-ladder li:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.tq-ladder li.is-lift{cursor:grabbing;position:relative;z-index:2;border-color:var(--primary);box-shadow:0 10px 22px -8px color-mix(in srgb,var(--bg-dark) 40%,transparent)}
+.tq-ladder .rank{width:20px;flex:none;font:var(--weight-label) var(--text-label)/1 var(--font);color:var(--text-tertiary);font-variant-numeric:tabular-nums}
+.tq-ladder .t{flex:1;min-width:0}
+.tq-ladder .gr{width:18px;height:18px;flex:none;color:var(--text-tertiary)}
+.tq-ladder .ok{display:none;width:18px;height:18px;color:var(--text-link)}
+.tq-ladder .ok svg{width:18px;height:18px}
+.tq-ladder li.is-ok{border-color:var(--primary);background:var(--primary-12);box-shadow:inset 0 0 0 1px var(--primary);cursor:default}
+.tq-ladder li.is-ok .ok{display:block}
+.tq-ladder li.is-ok .gr{display:none}
+.tq-ladder li.is-off{border-color:var(--gold);background:color-mix(in srgb,var(--gold-light) 22%,var(--bg-raised))}
+.tq-ladder.is-done li{cursor:default}
+
+/* a quest's answers are Learn's own (.answers, .answer, .feedback in app.css) */
+.tq .feedback:empty{display:none}
+.tq .feedback{font-size:var(--text-label)}
+.tq-badge{display:inline-flex;align-items:center;gap:var(--space-1);margin-top:var(--space-2);font-weight:var(--weight-heading)}
+.tq-badge svg{width:16px;height:16px}
+
+/* the identity's arrival: the crest and its two chips */
+.tq-id{display:flex;flex-direction:column;align-items:center;gap:var(--space-4);padding:var(--space-2) 0}
+.tq-crest{display:block;flex:none;overflow:visible;animation:tq-rise 900ms var(--ease) both}
+.tq-crest .o{fill:var(--bg-raised);stroke:var(--heading);stroke-width:1.6;stroke-dasharray:5 4.2}
+.tq-crest .g{fill:none;stroke:var(--primary);stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round}
+:root[data-mode-now="dark"] .tq-crest .g{stroke:var(--primary-48)}
+@keyframes tq-rise{from{opacity:0;transform:scale(.7)}}
+@media (prefers-reduced-motion:reduce){.tq-crest,.tq-edit{animation:none}}
+
+/* the stages, as a list: done, now, to come */
+.tq-map{display:flex;flex-direction:column;margin:0;padding:0;list-style:none;border-top:1px solid var(--border)}
+.tq-map li{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--border)}
+.tq-map .n{display:grid;place-items:center;width:24px;height:24px;flex:none;border-radius:var(--r-chip);background:var(--bg-sunken);
+  color:var(--text-secondary);font:var(--weight-label) var(--text-label)/1 var(--font)}
+.tq-map .n svg{width:14px;height:14px}
+.tq-map .t{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.tq-map .t b{font:var(--weight-label) var(--text-reading)/1.25 var(--font);color:var(--text)}
+.tq-map .t small{font-size:var(--text-label);line-height:1.4;color:var(--text-tertiary)}
+.tq-map .m{flex:none;font:var(--weight-label) var(--text-label)/1 var(--font);color:var(--text-tertiary);white-space:nowrap}
+.tq-map li.done .n{background:var(--primary-12);color:var(--text-link)}
+.tq-map li.done .t b{color:var(--text-secondary)}
+.tq-map li.now .n{background:var(--primary);color:var(--fy-key-ink)}   /* white on her black; black on her white in dark */
+.tq-map li.now .t b{color:var(--heading);font-weight:var(--weight-heading)}
+
+/* what a stage built */
+.tq-sum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-2);margin:0}
+.tq-sum div{padding:var(--space-3);border-radius:var(--r-card);background:var(--bg-sunken);min-width:0}
+.tq-sum dt{font:var(--weight-label) var(--text-label)/1.2 var(--font);color:var(--text-tertiary)}
+.tq-sum dd{margin:var(--space-2) 0 0;font:var(--weight-heading) var(--text-reading)/1.3 var(--font);color:var(--heading);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+
+/* the papers: a row for each line and policy, its file key at the end */
+.tq-up{display:flex;flex-direction:column;margin:0;padding:0;list-style:none;border-top:1px solid var(--border)}
+.tq-up li{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) 0;border-bottom:1px solid var(--border)}
+.tq-up .t{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+.tq-up .t b{font:var(--weight-label) var(--text-reading)/1.25 var(--font);color:var(--text)}
+.tq-up .t small{font-size:var(--text-label);line-height:1.4;color:var(--text-tertiary);overflow-wrap:anywhere}
+.tq-up .is-set .t small{color:var(--text-link)}
+.tq-file{flex:none;cursor:pointer}
+/* a film in the card (id-intro, 4 Oct 2026): the Learn video without its panel, the frame full width, its text below */
+.tq-card.is-film .lv-full{padding:0;margin:0;background:none;box-shadow:none;border:0;border-radius:0}
+.tq-card.is-film .lv-full .sg-h{display:none}
+.tq-card.is-film .lv-full .lv-title{display:none}   /* the card says it; the frame carries the film's own title */
+.tq-card.is-film .lv-frame{max-width:none}
+.tq-card.is-film .lv-desc{font-size:var(--text-label)}
+/* investments: the statement, beside the kinds (4 Oct 2026) */
+.tq-stmt{margin-top:var(--space-3)}
+.tq-stmt-k{border-style:dashed}
+.tq-stmt-k .tq-up-ic{width:16px;height:16px}
+.tq-stmt-done{display:flex;gap:var(--space-2);align-items:flex-start;margin:0;padding:var(--space-3);border-radius:var(--r-card);background:var(--bg-sunken);font-size:var(--text-label);line-height:1.45;color:var(--text-secondary)}
+.tq-stmt-done > svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--text-link)}
+.tq-stmt-done b{font-weight:var(--weight-label);color:var(--text);overflow-wrap:anywhere}
+.tq-file:focus-within{outline:2px solid var(--primary);outline-offset:2px}
+
+/* the mix: four steppers over one bar */
+.tq-mixbar{display:flex;gap:2px;height:14px;border-radius:7px;overflow:hidden;background:var(--border)}
+.tq-mixbar i{display:block;min-width:4px;transition:flex-grow var(--t-move) var(--ease)}
+.tq-steps{display:flex;flex-direction:column;margin:0;padding:0;list-style:none}
+.tq-steps li{display:flex;align-items:center;gap:var(--space-2);min-height:48px;border-bottom:1px solid var(--border)}
+.tq-steps .sw{width:12px;height:12px;flex:none;border-radius:3px}
+.tq-steps .t{flex:1;min-width:0;font:var(--weight-label) var(--text-reading)/1.2 var(--font);color:var(--text)}
+.tq-steps .v{min-width:3.5ch;text-align:center;font:var(--weight-heading) var(--text-reading)/1 var(--font);color:var(--heading);font-variant-numeric:tabular-nums}
+.tq-steps .icon-key{border:1px solid var(--border-strong);border-radius:var(--r-pill)}
+.tq-steps .icon-key:disabled{opacity:.4;cursor:default}
+.tq-tot{margin:0;font-size:var(--text-label);color:var(--text-link);font-weight:var(--weight-label)}
+.tq-tot.is-off{color:var(--text-error,var(--warning-dark))}
+
+.tq-checks{display:flex;flex-direction:column;gap:var(--space-2)}
+.tq-save{display:flex;flex-direction:column;gap:var(--space-3)}
+.tq-sent{margin:0;font-size:var(--text-reading);line-height:1.5;color:var(--text)}
+.tq-sent b{font-weight:var(--weight-heading);overflow-wrap:anywhere}
+
+
+/* ── THE SIDE PANEL (rebuilt 2 Oct 2026): Freya's panel beside the page ─────────────────────
+   On a desktop it docks at the right, full height, and the page narrows beside it (the work, Freya's
+   dock and the top pill move over by --tq-side), so the whole page shows while it answers. On a
+   tablet or a phone it rises from the foot, and the page keeps the room above it. */
+.tq-card.is-side{display:flex;flex-direction:column;padding:var(--space-4) var(--space-5) var(--space-5);
+  box-shadow:0 12px 40px color-mix(in srgb,var(--black) 16%,transparent)}
+:root[data-mode-now="dark"] .tq-card.is-side{box-shadow:var(--key-edge),0 0 0 var(--line-object) color-mix(in srgb,var(--white) 6%,transparent),0 16px 48px color-mix(in srgb,var(--black) 72%,transparent)}
+.tq-card.is-side .tq-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0 calc(-1 * var(--space-5));padding:0 var(--space-5) var(--space-1)}
+.tq-card.is-side .walk-say{margin-top:var(--space-4)}
+.tq-card.is-side .walk-title{font-size:var(--text-title);line-height:1.15;text-wrap:balance}
+.tq-card.is-side .walk-line{font-size:var(--text-label);line-height:1.5}
+.tq-card.is-side .tq-keys{margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--border)}
+@media (min-width:1101px){
+  .tq-card.is-side{left:auto;right:var(--space-4);top:var(--space-4);bottom:var(--space-4);width:var(--tq-side-w,420px)}
+  :root[data-tq-side] :where(.product) .work{padding-right:var(--tq-side)}
+  :root[data-tq-side] :where(.product) .dock{right:var(--tq-side)}
+  :root[data-tq-side] :where(.product) .top-pill{right:var(--tq-side)}
+}
+@media (max-width:1100px){
+  .tq-card.is-side{left:50%;right:auto;top:auto;bottom:calc(var(--space-3) + env(safe-area-inset-bottom,0px));transform:translateX(-50%);
+    width:min(640px,calc(100% - 2 * var(--space-3)));max-height:min(58%,620px);padding:var(--space-4)}
+  .tq-card.is-side .tq-scroll{margin:0 calc(-1 * var(--space-4));padding:0 var(--space-4) var(--space-1)}
+  .tq-card.is-side .walk-title{font-size:var(--text-subhead);line-height:var(--lh-subhead)}
+}
+@media (max-width:768px){.tq-card.is-side{max-height:62%}.tq-card.is-side .tq-keys [data-tq="go"]{flex:1;justify-content:center}}
+
+/* ── THE COACH: the card beside the part it explains, with a pointer, moving from part to part ── */
+.tq-card.is-coach{padding:var(--space-4) var(--space-5) var(--space-5);transition:left 380ms var(--ease),top 380ms var(--ease);
+  box-shadow:0 14px 36px color-mix(in srgb,var(--black) 20%,transparent)}
+:root[data-mode-now="dark"] .tq-card.is-coach{box-shadow:var(--key-edge),0 0 0 var(--line-object) color-mix(in srgb,var(--white) 6%,transparent),0 16px 48px color-mix(in srgb,var(--black) 72%,transparent)}
+.tq-card.is-coach .wg-head{min-height:var(--key-height-s)}
+.tq-card.is-coach .wg-head .fy-mk{width:28px;height:28px}
+.tq-card.is-coach .walk-say{margin-top:var(--space-3)}
+.tq-card.is-coach .walk-title{font-size:var(--text-subhead);line-height:var(--lh-subhead);text-wrap:balance}
+.tq-card.is-coach .walk-line{font-size:var(--text-label);line-height:1.5}
+.tq-card.is-coach .tq-keys{margin-top:var(--space-4)}
+.tq-card.is-coach .tq-scroll{overflow:visible}
+/* the pointer: a turned square on the edge that faces the part, at the part's middle */
+.tq-card.is-coach[data-pt]::before{content:"";position:absolute;width:14px;height:14px;background:var(--bg-raised);
+  border:var(--line-object) solid var(--border-strong);rotate:45deg;transition:top 380ms var(--ease),left 380ms var(--ease)}
+.tq-card.is-coach[data-pt="right"]::before{left:-8px;top:calc(var(--tq-ay,24px) - 7px);border-right:0;border-top:0}
+.tq-card.is-coach[data-pt="left"]::before{right:-8px;top:calc(var(--tq-ay,24px) - 7px);border-left:0;border-bottom:0}
+.tq-card.is-coach[data-pt="below"]::before{top:-8px;left:calc(var(--tq-ax,24px) - 7px);border-right:0;border-bottom:0}
+.tq-card.is-coach[data-pt="above"]::before{bottom:-8px;left:calc(var(--tq-ax,24px) - 7px);border-left:0;border-top:0}
+/* a tap: the card says what to press; the key beside it goes there instead */
+.tq-card.is-tap .walk-title::before{content:"";display:inline-block;width:8px;height:8px;margin:0 var(--space-2) 2px 0;border-radius:2px;rotate:45deg;background:var(--primary);vertical-align:middle}
+@media (max-width:768px){
+  .tq-card.is-coach{transition:top 300ms var(--ease)}
+  .tq-card.is-coach .tq-keys [data-tq="go"]{flex:1;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){.tq-card.is-coach,.tq-card.is-coach[data-pt]::before{transition:none}}
+
+/* ── THE BADGE: a path finished, celebrated on the spot ─────────────────────────────────── */
+.tq-card.is-badge{text-align:center;width:min(440px,calc(100% - 2 * var(--space-4)))}
+.tq-card.is-badge .walk-say{margin-top:var(--space-2)}
+.tq-card.is-badge .walk-title{font-size:var(--text-heading);line-height:1.05;max-width:none;margin-inline:auto}
+.tq-card.is-badge .walk-line{margin-inline:auto;max-width:36ch}
+.tq-card.is-badge .wg-eb{justify-content:center}
+.tq-card.is-badge .tq-body{align-items:center}
+.tq-card.is-badge .tq-keys{justify-content:center;border-top:0;padding-top:0}
+.tq-card.is-badge .tq-keys [data-tq="go"]{min-width:12rem;justify-content:center}
+.tq-card.is-badge .tq-scroll{display:flex;flex-direction:column}
+.tq-card.is-badge .tq-body{order:-1;margin-top:0}
+.tq-badge-xp{margin:var(--space-4) 0 0;font-size:var(--text-label);color:var(--text-secondary)}
+.tq-badge-xp b{color:var(--text-link);font-weight:var(--weight-heading)}
+.tq-medal .lmk.is-draw .tick{stroke-dasharray:20;stroke-dashoffset:20;animation:lm-grow 700ms var(--ease) 350ms forwards}
+.tq-medal .lmk.is-draw .b{animation:lm-pop 800ms var(--ease) both}
+@media (prefers-reduced-motion:reduce){.tq-medal .lmk.is-draw .tick,.tq-medal .lmk.is-draw .b{animation:none;stroke-dashoffset:0}}
+.tq-medal{position:relative;display:grid;place-items:center;width:132px;height:132px;margin:var(--space-2) auto 0}
+.tq-medal .lmk{width:88px;height:88px;position:relative;z-index:1}
+.tq-medal i{position:absolute;inset:22px;border-radius:50%;border:1.5px solid var(--primary-48);opacity:0;animation:tq-burst 1600ms var(--ease) forwards}
+.tq-medal i:nth-child(2){animation-delay:180ms}
+.tq-medal i:nth-child(3){animation-delay:360ms}
+@keyframes tq-burst{0%{opacity:.9;transform:scale(.8)}100%{opacity:0;transform:scale(1.55)}}
+@media (prefers-reduced-motion:reduce){.tq-medal i{display:none}}
+@media (max-width:768px){.tq-card.is-badge{left:50%;top:50%;bottom:auto;right:auto;transform:translate(-50%,-50%);width:calc(100% - 2 * var(--space-4))}}
+
+/* THE TUTORIAL ON PROFILE (2 Oct 2026; five desks since 3 Oct): each desk a row that starts the
+   tutorial there. One column on a phone; two (three and two) from a card 640px wide, read down the
+   first and then the second. A desk not open yet shows its lock; Open every desk now sits below. */
+.tq-tut{container-type:inline-size}
+.tq-from-list{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--border)}
+.tq-from{gap:var(--space-3);padding:var(--space-3) var(--space-2)}
+.tq-from .n{display:grid;place-items:center;width:24px;height:24px;flex:none;border-radius:var(--r-chip);background:var(--bg-sunken);
+  color:var(--text-secondary);font:var(--weight-label) var(--text-label)/1 var(--font)}
+.tq-from .n svg{width:14px;height:14px}
+.tq-from .record-sub{white-space:normal;line-height:1.4}
+.tq-from .record-meta{display:inline-flex;align-items:center;gap:var(--space-2);font:var(--weight-label) var(--text-label)/1 var(--font);color:var(--text-tertiary);white-space:nowrap}
+.tq-from .record-meta .ic{width:16px;height:16px;color:var(--text-link);transition:translate var(--t-state) var(--ease)}
+.tq-from:hover .record-meta .ic{translate:2px 0}
+.tq-from:focus-visible{outline:2px solid var(--focus,var(--primary));outline-offset:-2px}
+.tq-from.is-done .n{background:var(--primary-12);color:var(--text-link)}
+.tq-from.is-now{background:var(--primary-6)}
+.tq-from.is-now .n{background:var(--primary);color:var(--white)}
+.tq-from.is-now .record-title{color:var(--heading)}
+.tq-tut .sg-foot .help{margin:0;flex:1 1 32ch}
+.tq-tut .sg-foot button.link{padding:0;border:0;background:none;cursor:pointer}
+.tq-tut [data-armed]:not(.key){color:var(--text-error)}
+/* the demo's Profile card (app.js tutDemoCard): its keys, then the desks under a quiet line */
+.tq-demo-keys{justify-content:flex-start;gap:var(--space-3)}
+.tq-tut .tq-demo-or{margin:var(--space-5) 0 var(--space-2)}
+@container (min-width:640px){
+  .tq-from-list{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,auto);grid-auto-flow:column;column-gap:var(--space-5)}
+  .sg-card .tq-from:nth-child(3){border-bottom:0}
+}
+@media (prefers-reduced-motion:reduce){.tq-from .record-meta .ic{transition:none}}
+.tq-from.is-locked .n{background:transparent;box-shadow:inset 0 0 0 1px var(--border-strong);color:var(--text-tertiary)}
+.tq-from.is-locked .n .ic{width:13px;height:13px}
+.tq-from.is-locked .record-title{color:var(--text-secondary)}
+.tq-open-all{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-5);padding:var(--space-4) 0;border-bottom:1px solid var(--border)}
+.tq-open-all .help{margin:0;flex:1 1 32ch}
+
+/* ══ ONE DESK AT A TIME (3 Oct 2026) ══════════════════════════════════════════════════════════
+   The map shows the desks still locked; Freya says what she knows now, with her rings (VIEWS.fgRings,
+   app.css) beside what she learned; a desk opens with a short ceremony on its own plate, in the desk
+   blue. Tokens only; her rings keep her green. */
+.tq-map li.locked .n{background:transparent;box-shadow:inset 0 0 0 1px var(--border-strong);color:var(--text-tertiary)}
+.tq-map li.locked .n .ic{width:13px;height:13px}
+.tq-map li.locked .t b{color:var(--text-secondary)}
+
+/* Freya, what I know now: her rings, then the strand, what she knows of it, and the inner ring */
+.tq-fg{display:flex;flex-direction:column;align-items:center;gap:var(--space-4)}
+.tq-fg > .fg-rings{width:120px;height:auto}
+.tq-fg-t{display:flex;flex-direction:column;gap:var(--space-3);width:100%;min-width:0}
+.tq-fg-k{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:var(--space-1) var(--space-3);margin:0;padding-bottom:var(--space-2);border-bottom:1px solid var(--border)}
+.tq-fg-k b{font:var(--weight-heading) var(--text-reading)/1.3 var(--font);color:var(--heading)}
+.tq-fg-k span{font:var(--weight-label) var(--text-label)/1.2 var(--font);color:var(--text-link);font-variant-numeric:tabular-nums}
+.tq-fg-l{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--space-2)}
+.tq-fg-l li{display:flex;gap:var(--space-2);align-items:flex-start;font-size:var(--text-label);line-height:1.4;color:var(--text-secondary);min-width:0}
+.tq-fg-l li > svg{width:14px;height:14px;flex:none;margin-top:2px;color:var(--text-link)}
+.tq-fg-l li > span{min-width:0;overflow-wrap:anywhere}
+.tq-fg-l b{font-weight:var(--weight-label);color:var(--text)}
+.tq-fg-gap{margin:0;font-size:var(--text-label);line-height:1.4;color:var(--text-tertiary)}
+.tq-fg-you{margin:0;padding:var(--space-3);border-radius:var(--r-card);background:var(--bg-sunken);font-size:var(--text-label);line-height:1.45;color:var(--text-secondary)}
+.tq-fg-you b{font-weight:var(--weight-label);color:var(--text)}
+.tq-fg.is-row{flex-direction:row;align-items:center}
+.tq-fg.is-row > .fg-rings{width:88px}
+.tq-fg.is-row .tq-quiet{flex:1;min-width:0}
+@media (min-width:600px){
+  .tq-fg{flex-direction:row;align-items:flex-start;gap:var(--space-5)}
+  .tq-fg > .fg-rings{width:132px}
+  .tq-fg.is-row > .fg-rings{width:96px}
+}
+@media (max-height:700px){.tq-fg > .fg-rings{width:96px}}
+/* her promise, the first time she says what she knows (4 Oct 2026, Christian: "make it very clear … that they read and
+   see this"): one line set apart in the desk blue with white words, the desks being where it grows. It rises in a beat
+   after the card, so the eye lands on it */
+.tq-more{display:flex;align-items:center;gap:var(--space-3);margin:var(--space-4) 0 0;padding:var(--space-3) var(--space-4);border-radius:var(--r-card);
+  background:var(--desk);color:var(--white);font:var(--weight-heading) var(--text-subhead)/var(--lh-subhead) var(--font);text-wrap:balance;max-width:52ch}
+.tq-more-ic{flex:none;width:24px;height:24px;color:var(--white)}
+.tq-more span{min-width:0}
+@media (prefers-reduced-motion:no-preference){.tq-more{animation:tq-more-in 520ms var(--ease) 380ms both}}
+@keyframes tq-more-in{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+@media (max-width:599px){.tq-more{padding:var(--space-3);font-size:var(--text-reading);line-height:1.35}}
+
+/* a desk opens: its plate on the desk ground, a ring going out from it once */
+.tq-open{position:relative;display:grid;place-items:center;width:72px;height:72px;border-radius:50%;background:var(--desk-ground);box-shadow:inset 0 0 0 1px var(--desk-edge)}
+.tq-open .ic-section{width:40px;height:40px;color:var(--heading)}
+.tq-open::after{content:"";position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--desk-48);opacity:0;animation:tq-burst 1400ms var(--ease) 120ms forwards}
+.tq-card.is-open .wg-eb{color:var(--desk-text)}
+.tq-card.is-open .tq-open{margin-top:var(--space-5)}
+.tq-card.is-open .walk-say{margin-top:var(--space-4)}
+@media (prefers-reduced-motion:reduce){.tq-open::after{display:none}}
+
+/* SLIM: a step on a page the user works in (a quest on Learn) is one row on Freya's row, and the
+   page keeps that much more room at its foot so it scrolls clear of it */
+.tq-card.is-slim{display:block;padding:var(--space-3) var(--space-3) var(--space-3) var(--space-4)}
+.tq-slim{display:flex;align-items:center;gap:var(--space-3);min-width:0}
+.tq-slim > svg{width:32px;height:32px;flex:none}
+.tq-slim-say{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.tq-slim .wg-eb{margin:0}
+.tq-slim-t{margin:0;font:var(--weight-heading) var(--text-reading)/1.3 var(--font);color:var(--heading);text-wrap:balance}
+.tq-slim-l{margin:0;font-size:var(--text-label);line-height:1.4;color:var(--text-secondary)}
+.tq-slim-k{display:flex;align-items:center;gap:var(--space-2);flex:none}
+.tq-slim-k .link{white-space:nowrap}
+@media (max-width:560px){
+  .tq-slim{flex-wrap:wrap;align-items:flex-start}
+  .tq-slim-say{flex-basis:calc(100% - 32px - var(--space-3) - 40px)}
+  .tq-slim-k{order:3;width:100%;justify-content:flex-start;padding-left:calc(32px + var(--space-3))}
+  .tq-slim-k .icon-key{margin-left:auto}
+}
+:root[data-tq-foot] :where(.product) .work{padding-bottom:calc(160px + var(--tq-foot,0px))}
+@media (max-width:768px){:root[data-tq-foot] :where(.product) .work{padding-bottom:calc(var(--space-8) + var(--space-7) + var(--tq-foot,0px))}}
+@media (max-width:560px){.tq-card.is-slim .wg-eb,.tq-card.is-slim .tq-slim-l{display:none}}   /* the page says both on a phone */
+
+/* COLOUR ROLES IN THE TUTORIAL (3 Oct 2026, Christian: "freya is black as the desks are blue, its only
+   Learn which is green"). The tutorial is Freya's walk, so it is her black (app.css, COLOUR ROLES); its
+   steps on Learn and the XP are Learn's green, and a desk opening is the desk blue. */
+.product :is(.tq-card.is-learn,.tq-xp){--primary:var(--brand-green);--primary-hover:var(--brand-green-hover);--primary-pressed:var(--brand-green-pressed);
+  --primary-72:var(--brand-72);--primary-48:var(--brand-48);--primary-24:var(--brand-24);--primary-12:var(--brand-12);--primary-6:var(--brand-6);
+  --text-link:var(--brand-link);--bg-selected:var(--brand-sel);--text-selected:var(--brand-sel-text);--focus:var(--brand-link);--fy-key-ink:var(--white)}
+.product .tq-card.is-open{--primary:var(--desk);--primary-hover:var(--desk-hover);--primary-pressed:var(--desk-pressed);
+  --primary-72:var(--desk-72);--primary-48:var(--desk-48);--primary-24:var(--desk-24);--primary-12:var(--desk-12);--primary-6:var(--desk-6);
+  --text-link:var(--desk-text);--bg-selected:var(--desk-sel);--text-selected:var(--desk-sel-text);--focus:var(--desk-text);--fy-key-ink:var(--white)}
+
+/* ══ ON A PHONE, ONE WINDOW AT A TIME (9 Oct 2026) ════════════════════════════════════════════════
+   Christian, on the live app at 390px: "when the user goes through these steps, basically the right bar info on the
+   desktop, it should be full screen as a main rule"; "the mobile version keeps trying to show two windows at the same
+   time"; "something is wrong here with the text, maybe partly fixed with the full screen approach". A phone shows the
+   tutorial or the page, never a card floating over a page it half covers:
+     · a card that asks or tells (modal and side: the name, every entry, Freya's words, the ceremonies, the badge)
+       fills the screen: its head at the top, its body scrolling, its keys at the foot, clear of the safe areas, on the
+       card's own ground. The page is out of sight, so nothing is lit behind it (freya-tutorial.js, fullScreen()).
+     · a card that shows the page (coach, tap) sits at the foot, in the same place every step, as wide as Freya's
+       bar, and the part it shows is scrolled into the room above it (coachPos, into). It used to jump to the top.
+   The words get the room: the title a rung up, the line at the reading size. */
+@media (max-width:768px){
+  .tq-card.is-modal,.tq-card.is-side,.tq-card.is-badge{left:0;right:0;top:0;bottom:0;width:auto;max-height:none;transform:none;
+    border:0;border-radius:0;box-shadow:none;
+    padding:calc(var(--space-4) + env(safe-area-inset-top,0px)) var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom,0px))}
+  :root[data-mode-now="dark"] .tq-card.is-modal,:root[data-mode-now="dark"] .tq-card.is-side{box-shadow:none}
+  .tq[data-mode="modal"] .walk-spot,.tq[data-mode="side"] .walk-spot{display:none}
+  .tq[data-mode="modal"],.tq[data-mode="side"]{background:var(--bg-raised)}
+  .tq-card.is-modal .walk-say,.tq-card.is-side .walk-say{margin-top:var(--space-5)}
+  .tq-card.is-modal .walk-title,.tq-card.is-side .walk-title{font-size:var(--text-title);line-height:1.15;max-width:none}
+  .tq-card.is-modal .walk-line,.tq-card.is-side .walk-line{font-size:var(--text-reading);line-height:var(--lh-reading)}
+  .tq-card.is-hello .walk-title{font-size:var(--text-heading);line-height:1.05}
+  .tq-card.is-modal .tq-keys,.tq-card.is-side .tq-keys{margin-top:var(--space-4);padding-top:var(--space-4)}
+  .tq-card.is-side .tq-keys [data-tq="go"],.tq-card.is-modal .tq-keys [data-tq="go"],.tq-card.is-modal .tq-keys [data-tq="continue"]{flex:1;justify-content:center}
+  /* a ceremony stands in the middle of its screen */
+  .tq-card.is-badge .tq-scroll{flex:0 1 auto;margin-block:auto}
+  /* the tutorial's pill steps aside while the Desks card is open over it (frame.css, THE DESKS CARD) */
+  .product[data-desks="on"] .tq-pill{visibility:hidden;pointer-events:none}
+  /* the coach at the foot, the same corners as Freya's bar it sits over */
+  .tq-card.is-coach{border-radius:var(--r-bar);padding:var(--space-4) var(--space-5) var(--space-5)}
+}
+
+/* ══ ONE KEY ON SCREEN WHILE A PART IS SHOWN (9 Oct 2026) ═════════════════════════════════════════
+   Christian, on Home's summary lit with "Write the rule" under the card's Next: "here is two CTA for the user at
+   the same time. Very confusing for the user." While a card shows a part of the page (coach) or answers beside it
+   (side, on a desktop), the card's key is the one to press: the part's own keys rest in the brand's inactive look
+   (brand/components.css: a flat sunken face, no shelf, the label still readable), which is the truth, since the page
+   under the card cannot be pressed. They stand up again as the card moves on (freya-tutorial.js, litMark). A tap
+   step is the other way round: there the page's key is the one to press, and it keeps its face. */
+:root[data-tq-lead] #root .tq-lit .key:not(.key-secondary):not(.key-quiet):not(.icon-key),
+:root[data-tq-lead] #root .tq-lit .key:not(.key-secondary):not(.key-quiet):not(.icon-key):hover{
+  background-color:var(--bg-sunken);background-image:none;color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border);transform:none}
+:root[data-tq-lead] #root .tq-lit .key-secondary,:root[data-tq-lead] #root .tq-lit .key-secondary:hover{
+  background-color:transparent;border-color:var(--border);color:var(--text-secondary);box-shadow:none;transform:none}
+
+/* ══ THE CONCEPT · THE TUTORIAL IN FIVE STAGES (11 Oct 2026, prompts 16–23) ═══════════════════════════════════
+   Ask, Payoff, Lesson and Open fill a phone's screen and sit in the side panel on a desktop; a pointer is a small
+   card beside the part it shows (just above the tab bar when the part is the tab bar). Every card is short; the rest
+   is behind its "i". A desk's cards are the desks' blue, Learn's are green, Freya's mark is black. */
+.product :is(.tq-card.is-desk,.tq-pillw){--primary:var(--desk);--primary-hover:var(--desk-hover);--primary-pressed:var(--desk-pressed);
+  --primary-72:var(--desk-72);--primary-48:var(--desk-48);--primary-24:var(--desk-24);--primary-12:var(--desk-12);--primary-6:var(--desk-6);
+  --text-link:var(--desk-text);--bg-selected:var(--desk-sel);--text-selected:var(--desk-sel-text);--focus:var(--desk-text);--fy-key-ink:var(--white)}
+/* the Ask head: the close key, the desk (or Learn), "2 of 4", and a bar for each question */
+.tq-ahead{display:grid;grid-template-columns:var(--key-height-m) minmax(0,1fr) var(--key-height-m);align-items:center;gap:var(--space-2);min-height:var(--key-height-m)}
+.tq-ah-t{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);font:var(--weight-heading) var(--text-reading)/1 var(--font);color:var(--heading)}
+.tq-ah-t .ic-section,.tq-ah-t .ic{width:var(--key-icon-l);height:var(--key-icon-l)}
+.tq-ah-n{justify-self:end;font:var(--weight-label) var(--text-label)/1 var(--font);color:var(--text-secondary);white-space:nowrap}
+.tq-abars{display:flex;gap:var(--space-1);margin-top:var(--space-3)}
+.tq-abars i{flex:1;height:var(--space-1);border-radius:var(--r-pill);background:var(--bg-sunken)}
+.tq-abars i.on,.tq-abars i.now{background:var(--primary)}
+.tq-xhead{display:flex;justify-content:flex-end;min-height:var(--key-height-m)}
+/* the title: Freya's mark before it, its "i" after it */
+.tq-card .walk-title.tq-t{display:flex;align-items:flex-start;gap:var(--space-3)}
+.tq-card .walk-title.tq-t > span{flex:1;min-width:0}
+.tq-card .walk-title.tq-t > .fy-mk{flex:none;width:var(--key-icon-xl);height:var(--key-icon-xl);margin-top:calc(var(--space-1) / 2)}
+.tq-card .walk-title.tq-t > .tq-i{flex:none;margin-top:var(--space-1)}
+.tq-card.is-ask .walk-say,.tq-card.is-pay .walk-say{margin-top:var(--space-5)}
+/* the keys, stacked: the key, then Skip for now, Look around first or a quiet line under it */
+.tq-card .tq-keys.is-stack{flex:none;flex-direction:column;align-items:stretch;flex-wrap:nowrap;gap:var(--space-3)}
+.tq-card .tq-keys.is-stack > *{flex:none}
+.tq-card .tq-keys.is-stack .key{justify-content:center;width:100%;min-height:var(--key-height-l)}
+.tq-keys.is-stack .link{align-self:center}
+.tq-under{margin:0;text-align:center;font-size:var(--text-label);color:var(--text-secondary)}
+/* a pointer: the stage, one line, its "i", "1 of 2" and Next */
+.tq-card.is-point{width:min(calc(var(--space-8) * 4 + var(--space-5)),calc(100% - 2 * var(--space-4)))}
+.tq-pt .walk-title{margin-top:var(--space-2);font-size:var(--text-reading);line-height:var(--lh-subhead)}
+.tq-pt .walk-title > .fy-mk{width:var(--key-icon-l);height:var(--key-icon-l)}
+.tq-pt-k{display:flex;align-items:center;justify-content:flex-end;gap:var(--space-4);margin-top:var(--space-4)}
+.tq-pt-n{margin-right:auto;font-size:var(--text-label);color:var(--text-secondary)}
+.tq-card.is-point .tq-keys .key{background:var(--fy);color:var(--bg)}
+:root[data-mode-now="dark"] .tq-card.is-point .tq-keys .key{--fy-key-ink:var(--black)}   /* her white key in dark takes black words, as her bar's */
+/* the hello: the five desks' plates in a row, Records lit, and the film as a card */
+.tq-plates{display:flex;gap:var(--space-2);flex-wrap:wrap}
+.tq-plate{width:var(--key-height-xl);height:var(--key-height-xl);border-radius:50%;display:grid;place-items:center;background:var(--desk-6);color:var(--desk-48)}
+.tq-plate .ic-section{width:var(--card-icon);height:var(--card-icon)}
+.tq-plate.is-on{background:var(--desk);color:var(--white)}
+.tq-plate.is-lit{background:var(--bg-raised);color:var(--desk-text);box-shadow:inset 0 0 0 2px var(--desk-text)}
+:root[data-mode-now="dark"] .tq-plate:not(.is-on,.is-lit){color:var(--desk)}
+.tq-film .lv{margin:0}
+.tq-qfilm[hidden]{display:none}
+.tq-qfilm{margin-top:var(--space-3)}
+/* the payoff and the Open card: a flag, the figure, its picture, Freya's line */
+.tq-flag{display:inline-flex;align-self:flex-start;align-items:center;gap:var(--space-2);margin:0 0 var(--space-3);padding:var(--space-1) var(--space-3);border-radius:var(--r-pill);
+  background:var(--desk-12);color:var(--desk-text);font:var(--weight-label) var(--text-label)/1.4 var(--font)}
+.tq-flag svg{width:var(--key-icon-s);height:var(--key-icon-s)}
+.tq-flag.is-learn{background:var(--brand-12);color:var(--brand-link)}
+.tq-card.is-pay .walk-title .num{font-size:var(--text-heading);line-height:var(--lh-display);letter-spacing:var(--track-display)}
+.tq-say{display:flex;align-items:flex-start;gap:var(--space-3);margin:0}
+.tq-say .fy-mk{flex:none;width:var(--key-height-s);height:var(--key-height-s)}
+.tq-say span{padding:var(--space-3) var(--space-4);border-radius:var(--r-card);background:var(--fy-ground);color:var(--text);font-size:var(--text-reading);line-height:var(--lh-subhead)}
+.tq-limit{display:grid;gap:var(--space-1);margin:0;padding:var(--space-3) var(--space-4);border-radius:var(--r-card);background:var(--desk-6);box-shadow:inset 0 0 0 var(--line-hairline) var(--desk-12)}
+.tq-limit span{font-size:var(--text-label);color:var(--text-secondary)}
+.tq-gap{margin:0;font-size:var(--text-label);line-height:var(--lh-reading);color:var(--text-secondary)}
+.tq-card.is-opencard .walk-say{display:flex;flex-direction:column;align-items:center;text-align:center}
+.tq-card.is-opencard .tq-flag{align-self:center}
+.tq-card.is-opencard .tq-open{margin-inline:auto}
+.tq-card.is-opencard .walk-title{justify-content:center;font-size:var(--text-title)}
+/* the "i": a short sheet from the foot on a phone, a small card beside it on a desktop */
+.tq-info{position:fixed;z-index:2;display:grid;gap:var(--space-3);width:min(calc(var(--space-8) * 4),calc(100% - 2 * var(--space-4)));padding:var(--space-4);
+  border-radius:var(--r-card);background:var(--bg-raised);color:var(--text);pointer-events:auto;
+  box-shadow:inset 0 0 0 var(--line-hairline) var(--border),0 var(--space-3) var(--space-6) color-mix(in srgb,var(--black) 18%,transparent);animation:tq-info-in var(--t-move) var(--ease) both}
+.tq-info p{margin:0;font-size:var(--text-reading);line-height:var(--lh-reading)}
+.tq-info .key{justify-self:end}
+@keyframes tq-info-in{from{opacity:0;transform:translateY(var(--space-2))}to{opacity:1;transform:none}}
+@media (max-width:768px){
+  .tq-info{left:0;right:0;bottom:0;width:auto;border-radius:var(--r-card) var(--r-card) 0 0;padding:var(--space-5) var(--space-4) calc(var(--space-5) + env(safe-area-inset-bottom,0px))}
+  .tq-info .key{justify-self:stretch;justify-content:center}
+}
+/* the Continue pill: the next desk's plate, "Continue · Investment" and a close key, above the tab bar or Freya's bar */
+.tq-pillw{position:absolute;display:flex;align-items:center;gap:var(--space-1);transform:translateX(-50%);padding:var(--space-1);border-radius:var(--r-pill);
+  background:var(--fy);color:var(--fy-key-ink);box-shadow:0 var(--space-2) var(--space-5) color-mix(in srgb,var(--black) 22%,transparent);pointer-events:auto}
+:root[data-mode-now="dark"] .product .tq-pillw{--fy-key-ink:var(--black)}   /* her white pill in dark takes black words (the desk cards' white words are for blue faces) */
+.tq-pillw[hidden]{display:none}
+.tq .tq-pillw .tq-pill{position:static;transform:none;min-height:var(--key-height-m);max-width:none;padding:0 var(--space-3) 0 var(--space-2);border:0;background:none;box-shadow:none;
+  color:inherit;font:var(--weight-label) var(--text-label)/1 var(--font)}
+.tq .tq-pillw .tq-pill b{color:inherit;white-space:nowrap}
+.tq-pill-p{width:var(--key-height-s);height:var(--key-height-s);border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--fy-key-ink) 14%,transparent)}
+.tq-pill-p .ic-section{width:var(--key-icon-m);height:var(--key-icon-m)}
+.tq-pillw .tq-pill-x{width:var(--key-height-m);height:var(--key-height-m);color:inherit;border-radius:50%}
+.tq-pillw .tq-pill-x:hover{background:color-mix(in srgb,var(--fy-key-ink) 12%,transparent)}
+.tq-pillw .tq-pill:focus-visible,.tq-pillw .tq-pill-x:focus-visible{outline:2px solid var(--fy-key-ink);outline-offset:-2px;border-radius:var(--r-pill)}
+@media (prefers-reduced-motion:reduce){.tq-info{animation:none}}
+/* the tutorial's "i": the glossary's own mark (app.css .gl-i), drawn the same; its own class, so the glossary's tip leaves it to the card */
+.tq-i{--gli:var(--key-icon-m);position:relative;display:inline-flex;align-items:center;justify-content:center;width:calc(var(--gli) + var(--space-2));height:calc(var(--gli) + var(--space-2));
+  margin:0;padding:0;border:0;border-radius:50%;background:none;color:var(--heading);cursor:pointer;transition:background-color var(--t-state) var(--ease)}
+button.tq-i .ic{width:var(--gli);height:var(--gli);color:inherit;stroke-width:1.75}
+button.tq-i .ic circle{fill:currentColor;stroke:none}
+button.tq-i .ic path{stroke:var(--bg-raised);stroke-width:2.25}
+.tq-i:hover,.tq-i[aria-expanded="true"]{background:color-mix(in srgb,var(--heading) 8%,transparent)}
+.tq-i:focus-visible{outline:2px solid var(--heading);outline-offset:1px}
+@media (pointer:coarse){.tq-i::after{content:"";position:absolute;inset:calc(var(--space-2) * -1)}}
+
+/* while the tutorial's side panel is docked on a desktop, a page's sub menu steps aside for it, so the page keeps its room
+   beside the panel; it comes back as the panel goes (Christian, 15 Oct 2026: the sub menus are back) */
+:root[data-tq-side] :where(.product)[data-submenu="open"]{--sm-w:0px}
+:root[data-tq-side] :where(.product)[data-submenu="open"] .submenu{visibility:hidden}

@@ -1,5 +1,5 @@
-import DeploymentCard from "../components/deployment-card";
-import PageEffects from "../components/page-effects";
+import DeploymentCard from "../../components/deployment-card";
+import PageEffects from "../../components/page-effects";
 
 const workflow = [
   {
