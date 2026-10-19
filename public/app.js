@@ -5084,7 +5084,7 @@ var VIEWS = (function (A) {
   /* ── the parts of the page ── */
   function ofHead() {
     return '<header class="of-head"><div class="of-hi"><p class="of-date">' + e(OF_DAY.format(new Date(DEMO_TODAY + 'T00:00:00'))) + '</p>' +
-      '<h1 class="title">' + HM_HELLO() + (A.who() ? ',<span class="of-name"> ' + e(A.who()) + '</span>' : '') + '</h1></div>' +
+      '<h1 class="title">Mr. White</h1></div>' +
       '<a class="own-ini of-ini" href="#/profile" aria-label="Profile">' + e(ofInitial()) + '</a></header>';
   }
   /* WHILE DESKS ARE STILL TO OPEN (the concept, prompt 19): "Records is open. Investment is next.", about how long, and one
