@@ -1,5 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="18" fill="#101828"/>
-  <path fill="#fff" d="M20 16h27v9H30v8h15v9H30v16H20z"/>
-  <circle cx="49" cy="49" r="7" fill="#ff6b4a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Finna">
+  <!-- The app's own favicon, the same drawing as the public site's (Rose, 28 Sep 2026): the
+       core of the mark — the shape all four rings share — as a white outline, its counter
+       struck from the same four circles at a smaller radius, on a black square. Square, not
+       rounded, so no browser tab strip shows through at the corners (13 Sep 2026).
+       refresh.py leaves this file alone. -->
+  <rect width="32" height="32" fill="#000000"/>
+  <path d="M16 5.9 A30.48 30.48 0 0 1 26.1 16 A30.48 30.48 0 0 1 16 26.1 A30.48 30.48 0 0 1 5.9 16 A30.48 30.48 0 0 1 16 5.9 Z M16 10.445 A26.708 26.708 0 0 1 21.555 16 A26.708 26.708 0 0 1 16 21.555 A26.708 26.708 0 0 1 10.445 16 A26.708 26.708 0 0 1 16 10.445 Z" fill="#FFFFFF" fill-rule="evenodd"/>
 </svg>

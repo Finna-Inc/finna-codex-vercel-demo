@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" data-mode="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<link rel="icon" href="favicon.svg">
+<title>Finna Family Office</title>
+<!-- LIGHT AND DARK. Light is the default (Rose, 28 Sep 2026 — it used to follow the device); dark only
+     when someone picks it with the mode key, and that choice is remembered. Runs before the page paints
+     so it never flashes the wrong mode. data-mode-now says which one is showing, for the key's icon.
+     The stored choice moved to a new name, so a dark picked while it followed the device starts light. -->
+<script>
+(function () {
+  var root = document.documentElement;
+  function now() { root.setAttribute('data-mode-now', root.getAttribute('data-mode')); }
+  var saved = null; try { saved = localStorage.getItem('finna-mode-choice'); localStorage.removeItem('finna-mode'); } catch (e) {}
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-mode', saved);
+  now();
+  window.FinnaMode = { set: function (m) { root.setAttribute('data-mode', m); try { localStorage.setItem('finna-mode-choice', m); } catch (e) {} now(); } };
+})();
+</script>
+
+<!-- The brand, vendored from Finna-Inc/design. Never hand-edit brand/ — run refresh.py. -->
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="brand/tokens.css">
+<link rel="stylesheet" href="brand/components.css">
+<link rel="stylesheet" href="vendor/lenis.css">
+
+<!-- The app's own: the frame (main bar, sub menu, Freya's dock), then the screens. -->
+<link rel="stylesheet" href="frame.css">
+<link rel="stylesheet" href="app.css">
+<!-- THE TUTORIAL: Freya walks a new household through the whole office (index.html?tutorial). Asleep anywhere else. -->
+<link rel="stylesheet" href="freya-tutorial.css">
+</head>
+<body class="product">
+<div id="root"></div>
+<script src="brand/components.js"></script>
+<!-- smooth scroll: the website's Lenis, vendored from Finna-Inc/design by refresh.py -->
+<script src="vendor/lenis.min.js"></script>
+<!-- the what-if tools' engine (FinnaSim): pure functions, read by app.js as A.sim -->
+<script src="sim.js"></script>
+<!-- Learn's Map at launch: the paths and quests (content, draft for the CCO), read by app.js as A.LM -->
+<script src="learn.js"></script>
+<script src="app.js"></script>
+<script src="freya-tutorial.js"></script>
+</body>
+</html>

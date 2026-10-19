@@ -1,5 +1,19 @@
 # Finna × Codex × GitHub × Vercel
 
+The home page runs the Finna Family Office prototype. Hash routes such as
+`/#/home` preserve its navigation. The delivery-loop demo remains at
+`/delivery-demo`; health and deployment APIs are unchanged.
+
+Imported from `Finna-Inc/finna-family-office-app` at commit
+`6c6ed251b2c45cf18d7f939bb2b33f11ff8eeda0`. Runtime files live in `public/`.
+This is a browser-only prototype with fictional seed data and browser-local state,
+not the live customer app or its authentication, storage or AI backend. Review
+with sample data. No customer records were imported.
+
+The vendored `public/brand/` assets are preserved from the source prototype.
+Refresh them from the design repository's generated assets rather than editing
+vendored tokens or components. This import does not upgrade them to brand-v2.
+
 A small, inspectable demo of an AI-assisted delivery loop:
 
 ```text
@@ -49,7 +63,7 @@ After the Git integration is connected, Vercel creates preview deployments for b
 
 | Path | Purpose |
 | --- | --- |
-| `app/page.jsx`, `app/globals.css` | Responsive React demo experience |
+| `app/delivery-demo/page.jsx`, `app/globals.css` | Responsive React demo experience |
 | `app/api/*/route.js` | Next.js health and deployment-metadata route handlers |
 | `components/` | Interactive client components |
 | `.github/workflows/ci.yml` | Pull-request and `main` checks |

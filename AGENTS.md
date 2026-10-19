@@ -26,3 +26,20 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Finna design source of truth
+
+Use **Finna Brand System**, currently version 2.0, for all new design decisions.
+Permanent entry: https://finna-inc.github.io/design/.
+Local source: `C:/Finna/design/brand-v2/`. Read its `FINNA-STYLE-GUIDE.md`,
+`tokens.css`, and relevant components before making UI changes. Follow the design
+agreement in `C:/Finna/design/AGENTS.md`.
+
+The design repository's `brand/` directory is archived 1.x. App-local copies of
+brand assets are runtime dependencies, not the authoritative design source; preserve
+existing imports until an explicit, verified migration. Reuse documented tokens and
+SVG assets. Identify missing patterns instead of inventing purported brand rules.
+
+Check affected desktop/mobile layouts, light/dark modes, and keyboard/interaction
+states. Report unverified states and distinguish local implementation from deployment.
+Use short, nonessential eyebrows and digital terminology (canvas, surface, text).

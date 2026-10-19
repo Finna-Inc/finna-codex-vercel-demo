@@ -3,9 +3,24 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { GET as getDeployment } from "../app/api/deployment/route.js";
 import { GET as getHealth } from "../app/api/health/route.js";
+import { access } from "node:fs/promises";
+import nextConfig from "../next.config.mjs";
 
-test("homepage explains the full delivery loop", async () => {
-  const page = await readFile("app/page.jsx", "utf8");
+test("home serves the prototype with all local script and stylesheet dependencies", async () => {
+  const rules = await nextConfig.rewrites();
+  assert.ok(rules.some(rule => rule.source === "/" && rule.destination === "/office.html"));
+  const html = await readFile("public/office.html", "utf8");
+  assert.match(html, /<title>Finna Family Office<\/title>/);
+  const assets = [...html.matchAll(/(?:src|href)="([^"#]+)"/g)].map(match => match[1]);
+  assert.ok(assets.includes("app.js"));
+  for (const asset of assets) {
+    assert.ok(!asset.includes(":") && !asset.startsWith("/"), `Local asset: ${asset}`);
+    await access(`public/${asset}`);
+  }
+});
+
+test("delivery demo explains the full delivery loop", async () => {
+  const page = await readFile("app/delivery-demo/page.jsx", "utf8");
 
   for (const step of [
     "Prompt Codex",
