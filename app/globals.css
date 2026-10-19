@@ -77,20 +77,10 @@ code {
   text-decoration: none;
 }
 
-.brand-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border-radius: 11px;
-  background: var(--ink);
-  color: var(--white);
-  font-size: 14px;
-}
-
-.brand-divider {
-  margin: 0 3px;
-  color: var(--accent);
+.brand-logo {
+  display: block;
+  width: 154px;
+  height: auto;
 }
 
 .header-link {
